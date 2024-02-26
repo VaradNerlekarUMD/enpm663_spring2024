@@ -45,8 +45,11 @@ def main(args=None):
     rclpy.init(args=args)
     # Create a new instance of SubscriberNode named 'subscriber_py'
     node = SubscriberNode("subscriber_py")
-    # Keep the node alive and processing data until shutdown
-    rclpy.spin(node)
+    try:
+        # Keep the node alive and processing data until shutdown
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        node.get_logger().fatal("Shutting down...")
     # Cleanly destroy the node instance
     node.destroy_node()
     # Shut down the ROS 2 Python client library

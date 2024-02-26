@@ -28,6 +28,8 @@ class SubscriberNode(Node):
         self._subscriber = self.create_subscription(
             String, "leia", self.receive_message, 10
         )
+        self._recv_msg = ""
+        self._timer = self.create_timer(10, self.print_msg)
         # The queue size is set to 10, which is the size of the message queue.
 
     def receive_message(self, msg):
@@ -39,5 +41,7 @@ class SubscriberNode(Node):
         Args:
             msg (std_msgs.msg.String): The received message object, containing the string data.
         """
-        self.get_logger().info(f"Receiving: {msg.data}")
-        # Logs the received message data.
+        self._recv_msg = msg.data
+
+    def print_msg(self):
+        self.get_logger().info(f"Receiving: {self._recv_msg}")

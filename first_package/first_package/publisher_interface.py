@@ -27,6 +27,9 @@ class PublisherNode(Node):
         super().__init__(node_name)
         # Create a publisher object for the 'leia' topic with a queue size of 10.
         self._publisher = self.create_publisher(String, "leia", 10)
+        # Initialize the message object that will be published.
+        self._string_msg = String()
+        self._counter = 0
         # Create a timer that calls `publish_message` every second.
         self._timer = self.create_timer(1, self.publish_message)
 
@@ -38,11 +41,10 @@ class PublisherNode(Node):
         The message format is "Help me Obi-Wan Kenobi, you are my only hope", demonstrating
         a simple message pattern.
         """
-        # Initialize the message object that will be published.
-        string_msg = String()
         # Set the message data.
-        string_msg.data = ("Help me Obi-Wan Kenobi, you are my only hope")
+        self._counter += 1
+        self._string_msg.data = f"Help me Obi-Wan Kenobi, you are my only hope. Called {self._counter} times."
         # Publish the message.
-        self._publisher.publish(string_msg)
+        self._publisher.publish(self._string_msg)
         # Log the message being published.
-        self.get_logger().info(f"Publishing: {string_msg.data}")
+        self.get_logger().info(f"Publishing: {self._string_msg.data}")
